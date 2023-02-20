@@ -1,4 +1,5 @@
-from sclib import SoundcloudAPI, Track, Playlist
+from sclib import SoundcloudAPI, Playlist
+from helper import fileToTab
 import os
 
 def downloadPlaylist(link):
@@ -21,7 +22,7 @@ def downloadPlaylist(link):
         
         #on regarde dans la trackList existante si il existe déjà 
         for trackName in trackList:
-            if trackName == fileName+'\n':
+            if trackName == fileName:
                 print(fileName + " already downloaded")
                 exist = True
                 break
@@ -38,7 +39,7 @@ def downloadPlaylist(link):
                 continue 
     return True 
             
-
+#read a file with tracknames and convert it to a tab
 def trackParser(playlistName):
     playlistFilePath = playlistName+"/"+playlistName+".txt" 
     path = "../output/"+playlistFilePath
@@ -47,10 +48,10 @@ def trackParser(playlistName):
     if not os.path.exists(path):
         return tab
     else:
-        f = open(path,"r")
-        tab = f.readlines()
+        tab = fileToTab(path)
         return tab
-
+    
+#write a new track name in the corresponding playlist
 def writeFile(playlistName,trackName): 
     playlistFilePath = playlistName+"/"+playlistName+".txt"
     file = open(playlistFilePath,"a")
@@ -58,6 +59,7 @@ def writeFile(playlistName,trackName):
     file.close()
     return 
 
+#check if a soundcloud playlist exist
 def checkPlaylist(link):
     #connection à l'api 
     api = SoundcloudAPI()

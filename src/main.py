@@ -1,37 +1,16 @@
 import threading
 from soundcloud_playlist import downloadPlaylist,checkPlaylist
-
-
-def removeEnd(string):
-    return string.strip()
-
-#todo fix lines
-def fileToTab(file):
-    file = open(file,'r')
-    tab = file.readlines()
-    for i in range(len(tab)):
-        tab[i] = tab[i].strip()
-    return tab
-
-# Fonction pour le thread d'ajout de lien
-def link_adder():
-    print("Please enter a command")
-    link = input('>>')
-    command = link.split(" ")
-    if command[0] == "add":
-        file = open("playlists.txt","w")
-        file.write(command[1])
-        file.close()
-    return
-
-# Démarrer le thread d'ajout de lien
-#init
-linkList = fileToTab("../playlists.txt")
+from helper import fileToTab
 
 def downloadCheck():
     for link in linkList:
         downloadPlaylist(link)
     return
+
+#Démarrer le thread d'ajout de lien
+#init
+linkList = fileToTab("../playlists.txt")
+
 print("*****Welcome to Soundcloud Downloader*****")
 print("Enter help to show commands")
 
@@ -47,9 +26,9 @@ while True:
             file.close()
 
     elif command[0] == "run":  
-        t = threading.Thread(target=downloadCheck,daemon=True)
-        t.start()
         print("Program started")
+        downloadCheck()
+        
 
     elif command[0] == "list":
         for playlist in linkList:
