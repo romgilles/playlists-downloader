@@ -1,4 +1,3 @@
-import threading
 from soundcloud_playlist import downloadPlaylist,checkPlaylist
 from helper import fileToTab
 
