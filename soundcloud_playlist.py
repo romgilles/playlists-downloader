@@ -7,6 +7,7 @@ def downloadPlaylist(link):
     try:
         playlist = api.resolve(link)
     except:
+        print("The link provided is not a playlist")
         return False
     
     playlistName = playlist.title
@@ -65,4 +66,14 @@ def writeFile(playlistName,trackName):
     file.close()
     return 
 
-    
+def checkPlaylist(link):
+    #connection à l'api 
+    api = SoundcloudAPI()
+    try:
+        playlist = api.resolve(link)
+        print(playlist.title+" OK")
+        return True
+    except:
+        print("The link provided is not a playlist")
+        return False
+        
