@@ -1,20 +1,27 @@
 from sclib import SoundcloudAPI, Playlist
-from helper import fileToTab
+from helper import fileToTab,getRoot
 import os
+
+outputPath = getRoot()+"/output/soundcloud/"
+dataPath = getRoot()+"/data/soundcloud/"
 
 def downloadPlaylist(link):
     #connection à l'api 
     api = SoundcloudAPI()
     playlist = api.resolve(link)
     playlistName = playlist.title
-    path = "../output/"+playlistName
+    
+    #../output/soundcloud/playlistName/
+    playlistPath = outputPath+playlistName
+
     #on parse le fichier pour ajouter chaque titre déjà existant dans un tableau
-    trackList = trackParser(playlistName)
+    trackList = trackParser(playlistPath,playlistName)
+
     assert type(playlist) is Playlist
 
     #si le dossier n'existe pas on le crée
-    if not os.path.exists(path):
-                os.makedirs(path)
+    if not os.path.exists(playlistPath):
+                os.makedirs(playlistPath)
     #on parcourt chaque track de la playlist existante
     for track in playlist.tracks:
         exist = False
@@ -32,17 +39,16 @@ def downloadPlaylist(link):
             #on créer le fichier si il n'existe pas
             
             try:
-                with open(path+"/"+fileName, 'wb+') as file:
+                with open(playlistPath+"/"+fileName, 'wb+') as file:
                     track.write_mp3_to(file)
-                writeFile(path,fileName)
+                writeFile(playlistName,fileName)
             except:
                 continue 
     return True 
             
 #read a file with tracknames and convert it to a tab
-def trackParser(playlistName):
-    playlistFilePath = playlistName+"/"+playlistName+".txt" 
-    path = "../output/"+playlistFilePath
+def trackParser(playlistPath,playlistName):
+    path = playlistPath+playlistName+".txt"
     tab= []
     #si house/house.txt n'existe pas
     if not os.path.exists(path):
@@ -53,7 +59,7 @@ def trackParser(playlistName):
     
 #write a new track name in the corresponding playlist
 def writeFile(playlistName,trackName): 
-    playlistFilePath = playlistName+"/"+playlistName+".txt"
+    playlistFilePath = dataPath+playlistName+".txt"
     file = open(playlistFilePath,"a")
     file.write(trackName+"\n")
     file.close()
@@ -70,4 +76,4 @@ def checkPlaylist(link):
     except:
         print("The link provided is not a playlist")
         return False
-        
+

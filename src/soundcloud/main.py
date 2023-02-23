@@ -1,14 +1,15 @@
 from soundcloud_playlist import downloadPlaylist,checkPlaylist
-from helper import fileToTab
+from helper import fileToTab, getRoot
+
 
 def downloadCheck():
     for link in linkList:
         downloadPlaylist(link)
     return
 
-#Démarrer le thread d'ajout de lien
-#init
-linkList = fileToTab("../playlists.txt")
+playlistsFile = getRoot()+"/data/links/soundcloud-playlists.txt"
+
+linkList = fileToTab(playlistsFile)
 
 print("*****Welcome to Soundcloud Downloader*****")
 print("Enter help to show commands")
